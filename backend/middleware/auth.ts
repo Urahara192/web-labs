@@ -47,7 +47,7 @@ export const authenticate = async (
     // 2. Поиск пользователя
     const user = await User.findOne({
       where: { id: decoded.id },
-      attributes: { exclude: ['password'] },
+      attributes: ['id', 'email', 'name'],
     });
 
     if (!user) {
@@ -87,7 +87,7 @@ export const authenticate = async (
     }
 
     if (process.env.NODE_ENV === 'development') {
-      response.error = (err as Error).message; // Приведение ошибки к типу Error
+      response.error = (err as Error).message;
     }
 
     return res.status(401).json(response);

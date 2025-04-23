@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { literal, CreationAttributes } from 'sequelize';
+import { literal, CreationAttributes, Op } from 'sequelize';
 import { Event } from '@models/Event';
 import dotenv from 'dotenv';
 
@@ -12,7 +12,14 @@ const router = Router();
  * /events:
  *   get:
  *     summary: Получить список всех мероприятий
- *     description: Возвращает список всех мероприятий, фильтруя удалённые.
+ *     description: Возвращает список всех мероприятий, с возможностью включить удалённые.
+ *     parameters:
+ *       - name: showDeleted
+ *         in: query
+ *         required: false
+ *         description: Показывать ли удалённые мероприятия
+ *         schema:
+ *           type: boolean
  *     responses:
  *       200:
  *         description: Список мероприятий
@@ -25,14 +32,27 @@ const router = Router();
  *       500:
  *         description: Ошибка при получении списка мероприятий
  */
-router.get('/', async (_req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    const events = await Event.findAll({
-      where: literal('"deleted_at" IS NULL') as unknown as Record<
-        string,
-        unknown
-      >,
-    });
+    const showDeleted = req.query.showDeleted === 'true';
+    let events;
+
+    if (showDeleted) {
+      // Если showDeleted=true, возвращаем все мероприятия
+      events = await Event.findAll({
+        order: [['createdAt', 'DESC']],
+        paranoid: false // Отключаем paranoid режим для получения удаленных записей
+      });
+    } else {
+      // Если showDeleted=false, возвращаем только неудаленные
+      events = await Event.findAll({
+        where: {
+          deletedAt: null
+        },
+        order: [['createdAt', 'DESC']]
+      });
+    }
+    
     res.status(200).json(events);
   } catch (error) {
     const err =
@@ -237,7 +257,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Мероприятие не найдено' });
     }
 
-    await event.update({ deletedAt: new Date() });
+    await event.destroy();
+    
     res.status(200).json({ message: 'Мероприятие помечено как удалённое' });
   } catch (error) {
     const err =
