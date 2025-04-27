@@ -21,7 +21,6 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         bypass: function(req) {
-          // Если запрос идет к HTML странице, возвращаем index.html
           if (req.headers.accept?.includes('text/html')) {
             return '/index.html';
           }

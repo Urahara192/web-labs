@@ -21,7 +21,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const token = getToken();
     if (token) {
-      dispatch(getCurrentUser());
+    dispatch(getCurrentUser());
     }
   }, [dispatch]);
 

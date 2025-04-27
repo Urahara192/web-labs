@@ -1,5 +1,5 @@
 // frontend/src/pages/Register/RegisterPage.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../hooks/useAuth';
@@ -14,7 +14,7 @@ interface RegisterFormData {
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const { register: registerUser, isLoading, error: authError } = useAuth();
+  const { register: registerUser, isLoading, error: authError, clearError } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const {
     register,
@@ -25,18 +25,30 @@ export const RegisterPage: React.FC = () => {
 
   const password = watch('password');
 
+  useEffect(() => {
+    // Очищаем ошибки при размонтировании компонента
+    return () => {
+      clearError();
+    };
+  }, [clearError]);
+
   const onSubmit = async (data: RegisterFormData) => {
+    if (data.password !== data.confirmPassword) {
+      setError('Пароли не совпадают');
+      return;
+    }
+
     try {
       setError(null);
-      const success = await registerUser(data.email, data.password, data.name);
+      const { success, error } = await registerUser(data.email, data.password, data.name);
       if (success) {
         navigate('/events');
       } else {
-        setError('Ошибка при регистрации. Пожалуйста, попробуйте снова.');
+        setError(error || 'Произошла ошибка при регистрации');
       }
     } catch (err) {
       console.error('Registration error:', err);
-      setError('Произошла ошибка при регистрации.');
+      setError('Произошла неизвестная ошибка при регистрации');
     }
   };
 
@@ -116,7 +128,9 @@ export const RegisterPage: React.FC = () => {
           </div>
 
           {(error || authError) && (
-            <div className={styles.error}>{error || authError}</div>
+            <div className={styles.errorMessage}>
+              {error || authError}
+            </div>
           )}
 
           <button type="submit" className={styles.submitButton} disabled={isLoading}>

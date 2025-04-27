@@ -52,6 +52,14 @@ export const participateInEvent = createAsyncThunk(
   }
 );
 
+export const deleteEvent = createAsyncThunk(
+  'events/deleteEvent',
+  async (eventId: string) => {
+    const response = await eventService.deleteEvent(eventId);
+    return { id: eventId, ...response };
+  }
+);
+
 const eventSlice = createSlice({
   name: 'events',
   initialState,
@@ -109,6 +117,22 @@ const eventSlice = createSlice({
       .addCase(participateInEvent.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка при участии в мероприятии';
+      })
+      .addCase(deleteEvent.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteEvent.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.events = state.events.filter(event => event.id !== action.payload.id);
+        state.userEvents = state.userEvents.filter(event => event.id !== action.payload.id);
+        if (state.selectedEvent?.id === action.payload.id) {
+          state.selectedEvent = null;
+        }
+      })
+      .addCase(deleteEvent.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Ошибка при удалении мероприятия';
       });
   },
 });

@@ -58,6 +58,24 @@
   margin-top: 0.25rem;
 }
 
+.errorMessage {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #feb2b2;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
 .submitButton {
   padding: 0.75rem;
   background-color: #007bff;
@@ -97,17 +115,96 @@
   }
 }
 
-@media (max-width: 320px) {
+// Медиа-запросы для разных размеров экранов
+@media (max-width: 1024px) {
+  .formWrapper {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
   .container {
     padding: 1.5rem;
-    margin: 1rem auto;
   }
 
-  input {
-    padding: 0.6rem;
+  .formWrapper {
+    max-width: 320px;
+    padding: 1.5rem;
   }
 
-  button {
+  .form {
+    gap: 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .formWrapper {
+    max-width: 100%;
+    padding: 1.25rem;
+  }
+
+  .form {
+    gap: 1rem;
+  }
+
+  .formGroup {
+    input {
+      padding: 0.65rem;
+      font-size: 0.95rem;
+    }
+  }
+
+  .submitButton {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .formWrapper {
+    padding: 1rem;
+  }
+
+  .form {
+    gap: 0.875rem;
+  }
+
+  .formGroup {
+    input {
+      padding: 0.6rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .submitButton {
     padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .registerLink {
+    font-size: 0.85rem;
   }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchEvents, participateInEvent } from '../../store/slices/eventSlice';
+import { fetchEvents, participateInEvent, deleteEvent } from '../../store/slices/eventSlice';
 import { getCurrentUser } from '../../store/slices/authSlice';
 import { getToken } from '../../utils/localStorage';
 import Modal from '../../components/Modal/Modal';
@@ -15,6 +15,7 @@ const EventsPage: React.FC = () => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [participatingEventId, setParticipatingEventId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [deletingEventId, setDeletingEventId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = getToken();
@@ -57,6 +58,19 @@ const EventsPage: React.FC = () => {
     return user ? participants.includes(user.id) : false;
   };
 
+  const handleDelete = async (eventId: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить это мероприятие?')) {
+      try {
+        setDeletingEventId(eventId);
+        await dispatch(deleteEvent(eventId)).unwrap();
+      } catch (error) {
+        console.error('Error deleting event:', error);
+      } finally {
+        setDeletingEventId(null);
+      }
+    }
+  };
+
   if (isLoading && !participatingEventId) {
     return <div className={styles.loading}>Загрузка...</div>;
   }
@@ -71,9 +85,9 @@ const EventsPage: React.FC = () => {
         <div className={styles.header}>
           <h1>Мероприятия</h1>
           {isAuthenticated && (
-            <Link to="/events/new" className={styles.createButton}>
-              Создать мероприятие
-            </Link>
+          <Link to="/events/new" className={styles.createButton}>
+            Создать мероприятие
+          </Link>
           )}
         </div>
         <div className={styles.noEvents}>
@@ -88,9 +102,9 @@ const EventsPage: React.FC = () => {
       <div className={styles.header}>
         <h1>Мероприятия</h1>
         {isAuthenticated && (
-          <Link to="/events/new" className={styles.createButton}>
-            Создать мероприятие
-          </Link>
+        <Link to="/events/new" className={styles.createButton}>
+          Создать мероприятие
+        </Link>
         )}
       </div>
 
@@ -114,15 +128,24 @@ const EventsPage: React.FC = () => {
             <div className={styles.actions}>
               {isAuthenticated ? (
                 isEventCreator(event.createdBy) ? (
-                  <Link
-                    to={`/events/edit/${event.id}`}
-                    className={styles.editButton}
-                  >
-                    Редактировать
-                  </Link>
-                ) : !isParticipant(event.participants) ? (
-                  <button
-                    onClick={() => handleParticipate(event.id)}
+                  <>
+                <Link
+                  to={`/events/edit/${event.id}`}
+                  className={styles.editButton}
+                >
+                  Редактировать
+                </Link>
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      className={styles.deleteButton}
+                      disabled={deletingEventId === event.id}
+                    >
+                      {deletingEventId === event.id ? 'Удаление...' : 'Удалить'}
+                    </button>
+                  </>
+              ) : !isParticipant(event.participants) ? (
+                <button
+                  onClick={() => handleParticipate(event.id)}
                     className={styles.participateButton}
                     disabled={participatingEventId === event.id}
                   >

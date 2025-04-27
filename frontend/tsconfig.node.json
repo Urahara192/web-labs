@@ -9,7 +9,7 @@
     "isolatedModules": true,
     "strict": true,
     "target": "ESNext",
-    "noEmit": false, // обязательно!
+    "noEmit": false,
     "skipLibCheck": true
   },
   "include": ["vite.config.ts"]

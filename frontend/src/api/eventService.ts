@@ -31,4 +31,10 @@ export const eventService = {
     const response = await axios.get(`/events/${eventId}/participants`);
     return response.data;
   },
+
+  deleteEvent: async (eventId: string) => {
+    const response = await axios.delete(`/events/${eventId}`);
+    return response.data;
+  },
 };
+ 

@@ -61,8 +61,8 @@ axiosInstance.interceptors.response.use(
         // Проверяем, не является ли текущий URL страницей логина или регистрации
         const currentPath = window.location.pathname;
         if (currentPath !== '/login' && currentPath !== '/register') {
-          store.dispatch(logout());
-          window.location.href = '/login';
+        store.dispatch(logout());
+        window.location.href = '/login';
         }
       }
       console.error('❌ Response Error:', {
@@ -79,3 +79,4 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+ 
