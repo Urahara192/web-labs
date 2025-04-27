@@ -1,0 +1,46 @@
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.participantItem {
+  padding: 0.75rem;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e9ecef;
+  }
+}
+
+.participantName {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.participantEmail {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.loading {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+  padding: 1rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+  font-style: italic;
+} 

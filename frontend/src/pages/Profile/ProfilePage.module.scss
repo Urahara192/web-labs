@@ -1,0 +1,76 @@
+.profileContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profileInfo {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+}
+
+.userInfo {
+  p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #666;
+
+    strong {
+      color: #333;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.eventsSection {
+  h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.eventCard {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  h3 {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: #666;
+  }
+
+  .date {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .participants {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+} 

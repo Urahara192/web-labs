@@ -1,0 +1,58 @@
+.header {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #007bff;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.link {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #007bff;
+  }
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #dc3545;
+  }
+}
+  
