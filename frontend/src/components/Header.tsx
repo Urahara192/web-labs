@@ -1,7 +1,7 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { checkAuth, logout } from '@api/authService';
-import { useEffect, useState } from 'react';
-import styles from './Header.module.scss';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { checkAuth, logout } from "@api/authService";
+import { useEffect, useState } from "react";
+import styles from "./Header.module.scss";
 
 interface User {
   id: string;
@@ -18,16 +18,16 @@ const Header = () => {
     const loadUser = async () => {
       try {
         const res = await checkAuth();
-        console.log('Check auth response:', res);
+        console.log("Check auth response:", res);
         if (res.success && res.user) {
-          console.log('Setting user:', res.user);
+          console.log("Setting user:", res.user);
           setUser(res.user);
         } else {
-          console.log('No user data in response');
+          console.log("No user data in response");
           setUser(null);
         }
       } catch (error) {
-        console.error('Error checking auth:', error);
+        console.error("Error checking auth:", error);
         setUser(null);
       }
     };
@@ -39,15 +39,16 @@ const Header = () => {
     try {
       await logout();
       setUser(null);
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
+      console.error("Ошибка при выходе:", error);
     }
   };
 
-  const displayName = user?.name || user?.email?.split('@')[0] || 'Пользователь';
-  console.log('Current user state:', user);
-  console.log('Display name:', displayName);
+  const displayName =
+    user?.name || user?.email?.split("@")[0] || "Пользователь";
+  console.log("Current user state:", user);
+  console.log("Display name:", displayName);
 
   return (
     <header className={styles.header}>

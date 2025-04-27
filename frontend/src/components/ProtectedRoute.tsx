@@ -1,7 +1,7 @@
-import { JSX, useEffect, useState } from 'react';
-import { getToken } from '@utils/localStorage';
-import { checkAuth } from '@api/authService';
-import { useNavigate } from 'react-router-dom';
+import { JSX, useEffect, useState } from "react";
+import { getToken } from "@utils/localStorage";
+import { checkAuth } from "@api/authService";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   children: JSX.Element;
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }: Props) => {
     const verify = async () => {
       const token = getToken();
       if (!token) {
-        navigate('/login');
+        navigate("/login");
         return;
       }
 
@@ -25,10 +25,10 @@ const ProtectedRoute = ({ children }: Props) => {
         if (res?.user) {
           setIsAuthorized(true);
         } else {
-          navigate('/login');
+          navigate("/login");
         }
       } catch {
-        navigate('/login');
+        navigate("/login");
       } finally {
         setChecking(false);
       }

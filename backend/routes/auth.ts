@@ -394,7 +394,7 @@ router.post('/logout', authenticate, async (req: Request, res: Response) => {
 
     await BlacklistedToken.create({
       token,
-      expiresAt: new Date(exp * 1000),
+      expires_at: new Date(exp * 1000),
     } as CreationAttributes<BlacklistedToken>);
 
     return res.json({ success: true, message: 'Выход выполнен' });

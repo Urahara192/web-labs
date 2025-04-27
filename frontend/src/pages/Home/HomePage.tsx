@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { getToken } from '@utils/localStorage';
-import styles from './HomePage.module.scss';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { getToken } from "@utils/localStorage";
+import styles from "./HomePage.module.scss";
 
 const HomePage: React.FC = () => {
   const isAuthenticated = !!getToken();

@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path-browserify';
-import { fileURLToPath } from 'url';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path-browserify";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,31 +11,31 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/auth': {
-        target: 'http://localhost:5000',
+      "/auth": {
+        target: "http://localhost:5000",
         changeOrigin: true,
         secure: false,
       },
-      '/events': {
-        target: 'http://localhost:5000',
+      "/events": {
+        target: "http://localhost:5000",
         changeOrigin: true,
         secure: false,
-        bypass: function(req) {
+        bypass: function (req) {
           // Если запрос идет к HTML странице, возвращаем index.html
-          if (req.headers.accept?.includes('text/html')) {
-            return '/index.html';
+          if (req.headers.accept?.includes("text/html")) {
+            return "/index.html";
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
   resolve: {
     alias: {
-      '@api': path.resolve(__dirname, './src/api'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@types': path.resolve(__dirname, './src/types'),
+      "@api": path.resolve(__dirname, "./src/api"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@types": path.resolve(__dirname, "./src/types"),
     },
   },
 });

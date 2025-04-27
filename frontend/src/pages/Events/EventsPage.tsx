@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import styles from './EventsPage.module.scss';
-import { fetchEvents } from '@api/eventService';
-import { getToken } from '@utils/localStorage';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import styles from "./EventsPage.module.scss";
+import { fetchEvents } from "@api/eventService";
+import { getToken } from "@utils/localStorage";
+import { useNavigate } from "react-router-dom";
 
 interface Event {
   id: string;
@@ -16,30 +16,33 @@ const EventsPage = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [showDeleted, setShowDeleted] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const token = getToken();
 
   useEffect(() => {
     if (!token) {
-      console.log('No token found, redirecting to login');
-      navigate('/login');
+      console.log("No token found, redirecting to login");
+      navigate("/login");
       return;
     }
 
     const loadEvents = async () => {
       try {
-        console.log('Loading events...');
+        console.log("Loading events...");
         setIsLoading(true);
-        setError('');
+        setError("");
         const data = await fetchEvents(showDeleted, token);
-        console.log('Events loaded:', data);
+        console.log("Events loaded:", data);
         setEvents(data);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        console.error('Error loading events:', err);
-        console.error('Error response:', err.response);
-        setError(err.response?.data?.message || 'Ошибка при загрузке мероприятий');
+        console.error("Error loading events:", err);
+        console.error("Error response:", err.response);
+        setError(
+          err.response?.data?.message || "Ошибка при загрузке мероприятий",
+        );
       } finally {
         setIsLoading(false);
       }
@@ -84,8 +87,8 @@ const EventsPage = () => {
       {events.length === 0 ? (
         <div className={styles.noEvents}>
           {showDeleted
-            ? 'Нет удалённых мероприятий'
-            : 'Пока нет созданных мероприятий'}
+            ? "Нет удалённых мероприятий"
+            : "Пока нет созданных мероприятий"}
         </div>
       ) : (
         <div className={styles.grid}>
@@ -93,19 +96,19 @@ const EventsPage = () => {
             <div
               key={event.id}
               className={`${styles.card} ${
-                event.deletedAt ? styles.deleted : ''
+                event.deletedAt ? styles.deleted : ""
               }`}
             >
               <h3>{event.title}</h3>
               <p className={styles.description}>{event.description}</p>
               <div className={styles.date}>
                 <span className={styles.icon}>📅</span>
-                {new Date(event.date).toLocaleString('ru-RU', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
+                {new Date(event.date).toLocaleString("ru-RU", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
                 })}
                 {event.deletedAt && (
                   <span className={styles.deletedLabel}>

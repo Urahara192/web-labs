@@ -1,5 +1,9 @@
-import { axiosInstance } from './axiosInstance';
-import { getToken as getStorageToken, removeToken, saveToken } from '@utils/localStorage';
+import { axiosInstance } from "./axiosInstance";
+import {
+  getToken as getStorageToken,
+  removeToken,
+  saveToken,
+} from "@utils/localStorage";
 
 interface LoginData {
   email: string;
@@ -24,7 +28,7 @@ interface AuthResponse {
 }
 
 export const login = async (data: LoginData): Promise<AuthResponse> => {
-  const response = await axiosInstance.post<AuthResponse>('/auth/login', data);
+  const response = await axiosInstance.post<AuthResponse>("/auth/login", data);
   if (response.data.success && response.data.token) {
     saveToken(response.data.token);
   }
@@ -33,21 +37,25 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
 
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   try {
-    const response = await axiosInstance.post<AuthResponse>('/auth/register', data);
+    const response = await axiosInstance.post<AuthResponse>(
+      "/auth/register",
+      data,
+    );
     if (response.data.success && response.data.token) {
       saveToken(response.data.token);
     }
     return response.data;
   } catch (error: any) {
-    if (error.response?.data?.message?.includes('уже существует')) {
-      throw new Error('Пользователь с таким email уже зарегистрирован');
+    // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (error.response?.data?.message?.includes("уже существует")) {
+      throw new Error("Пользователь с таким email уже зарегистрирован");
     }
     throw error;
   }
 };
 
 export const checkAuth = async (): Promise<AuthResponse> => {
-  const response = await axiosInstance.get<AuthResponse>('/auth/check-auth');
+  const response = await axiosInstance.get<AuthResponse>("/auth/check-auth");
   return response.data;
 };
 
@@ -55,7 +63,7 @@ export const logout = async (): Promise<void> => {
   const token = getStorageToken();
   if (token) {
     try {
-      await axiosInstance.post('/auth/logout');
+      await axiosInstance.post("/auth/logout");
     } finally {
       removeToken();
     }

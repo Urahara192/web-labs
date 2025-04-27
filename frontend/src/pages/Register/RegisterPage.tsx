@@ -1,8 +1,8 @@
 // frontend/src/pages/Register/RegisterPage.tsx
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { register } from '@api/authService'
-import styles from './RegisterPage.module.scss'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "@api/authService";
+import styles from "./RegisterPage.module.scss";
 
 interface ValidationErrors {
   name?: string;
@@ -13,91 +13,90 @@ interface ValidationErrors {
 }
 
 export const RegisterPage = () => {
-  const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [errors, setErrors] = useState<ValidationErrors>({})
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = (): boolean => {
-    const newErrors: ValidationErrors = {}
-    
+    const newErrors: ValidationErrors = {};
+
     // Валидация имени
     if (!name) {
-      newErrors.name = 'Имя обязательно'
+      newErrors.name = "Имя обязательно";
     } else if (name.length < 2) {
-      newErrors.name = 'Имя должно содержать минимум 2 символа'
+      newErrors.name = "Имя должно содержать минимум 2 символа";
     }
 
     // Валидация email
     if (!email) {
-      newErrors.email = 'Email обязателен'
+      newErrors.email = "Email обязателен";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Неверный формат email'
+      newErrors.email = "Неверный формат email";
     }
 
     // Валидация пароля
     if (!password) {
-      newErrors.password = 'Пароль обязателен'
+      newErrors.password = "Пароль обязателен";
     } else if (password.length < 6) {
-      newErrors.password = 'Пароль должен содержать минимум 6 символов'
+      newErrors.password = "Пароль должен содержать минимум 6 символов";
     } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-      newErrors.password = 'Пароль должен содержать буквы и цифры'
+      newErrors.password = "Пароль должен содержать буквы и цифры";
     }
 
     // Валидация подтверждения пароля
     if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Пароли не совпадают'
+      newErrors.confirmPassword = "Пароли не совпадают";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrors({})
+    e.preventDefault();
+    setErrors({});
 
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await register({ name, email, password })
-      navigate('/login')
+      await register({ name, email, password });
+      navigate("/login");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error('Registration error:', error)
-      
+      console.error("Registration error:", error);
+
       if (error.response?.status === 409) {
         setErrors({
-          general: error.response.data.message || 'Пользователь с таким email уже существует'
-        })
+          general: "Пользователь с таким email уже зарегистрирован",
+        });
       } else if (error.response?.status === 400) {
         // Ошибки валидации
-        setErrors(error.response.data.errors || {
-          general: error.response.data.message
-        })
-      } else if (error.response?.data?.message) {
-        setErrors({
-          general: error.response.data.message
-        })
+        setErrors(
+          error.response.data.errors || {
+            general: error.response.data.message,
+          },
+        );
       } else {
         setErrors({
-          general: 'Произошла ошибка при регистрации. Пожалуйста, попробуйте снова.'
-        })
+          general: "Пользователь с таким email уже зарегистрирован",
+        });
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
       <h2>Создать аккаунт</h2>
-      
+
       <form onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
           <label htmlFor="name">Имя</label>
@@ -124,7 +123,14 @@ export const RegisterPage = () => {
             required
             disabled={isLoading}
           />
-          {errors.email && <span className={styles.error}>{errors.email}</span>}
+          {errors.email && (
+            <div
+              className={styles.error}
+              style={{ marginBottom: "1rem", textAlign: "center" }}
+            >
+              {errors.email}
+            </div>
+          )}
         </div>
 
         <div className={styles.inputGroup}>
@@ -138,7 +144,9 @@ export const RegisterPage = () => {
             required
             disabled={isLoading}
           />
-          {errors.password && <span className={styles.error}>{errors.password}</span>}
+          {errors.password && (
+            <span className={styles.error}>{errors.password}</span>
+          )}
         </div>
 
         <div className={styles.inputGroup}>
@@ -158,13 +166,16 @@ export const RegisterPage = () => {
         </div>
 
         {errors.general && (
-          <div className={styles.error} style={{ marginBottom: '1rem', textAlign: 'center' }}>
+          <div
+            className={styles.error}
+            style={{ marginBottom: "1rem", textAlign: "center" }}
+          >
             {errors.general}
           </div>
         )}
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
+          {isLoading ? "Регистрация..." : "Зарегистрироваться"}
         </button>
       </form>
 
@@ -172,5 +183,5 @@ export const RegisterPage = () => {
         Уже есть аккаунт?<Link to="/login">Войти</Link>
       </p>
     </div>
-  )
-}
+  );
+};

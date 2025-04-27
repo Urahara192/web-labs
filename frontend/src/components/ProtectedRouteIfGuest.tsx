@@ -1,7 +1,7 @@
-import { JSX, useEffect, useState } from 'react';
-import { getToken } from '@utils/localStorage';
-import { checkAuth } from '@api/authService';
-import { useNavigate } from 'react-router-dom';
+import { JSX, useEffect, useState } from "react";
+import { getToken } from "@utils/localStorage";
+import { checkAuth } from "@api/authService";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   children: JSX.Element;
@@ -22,7 +22,7 @@ const ProtectedRouteIfGuest = ({ children }: Props) => {
       try {
         const res = await checkAuth(token);
         if (res?.user) {
-          navigate('/events');
+          navigate("/events");
         } else {
           setChecking(false);
         }

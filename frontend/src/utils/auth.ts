@@ -1,5 +1,5 @@
-import { getToken, saveToken as saveTokenToStorage } from './localStorage';
-import { checkAuth } from '@api/authService';
+import { getToken, saveToken as saveTokenToStorage } from "./localStorage";
+import { checkAuth } from "@api/authService";
 
 export const saveToken = (token: string): void => {
   saveTokenToStorage(token);

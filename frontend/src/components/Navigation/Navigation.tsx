@@ -1,7 +1,7 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { checkAuth, logout } from '@api/authService';
-import { useEffect, useState } from 'react';
-import styles from './Navigation.module.scss';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { checkAuth, logout } from "@api/authService";
+import { useEffect, useState } from "react";
+import styles from "./Navigation.module.scss";
 
 interface User {
   id: string;
@@ -16,18 +16,20 @@ const Navigation = () => {
 
   useEffect(() => {
     const loadUser = async () => {
+      if (location.pathname === "/login" || location.pathname === "/register") {
+        setUser(null);
+        return;
+      }
+
       try {
         const res = await checkAuth();
-        console.log('Check auth response:', res);
         if (res.success && res.user) {
-          console.log('Setting user:', res.user);
           setUser(res.user);
         } else {
-          console.log('No user data in response');
           setUser(null);
         }
       } catch (error) {
-        console.error('Error checking auth:', error);
+        console.error("Error checking auth:", error);
         setUser(null);
       }
     };
@@ -39,22 +41,25 @@ const Navigation = () => {
     try {
       await logout();
       setUser(null);
-      navigate('/login');
+      setTimeout(() => {
+        navigate("/login");
+      }, 100);
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
+      console.error("Ошибка при выходе:", error);
     }
   };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (!user) {
       e.preventDefault();
-      navigate('/');
+      navigate("/");
     }
   };
 
-  const displayName = user?.name || user?.email?.split('@')[0] || 'Пользователь';
-  console.log('Current user state:', user);
-  console.log('Display name:', displayName);
+  const displayName =
+    user?.name || user?.email?.split("@")[0] || "Пользователь";
+  console.log("Current user state:", user);
+  console.log("Display name:", displayName);
 
   return (
     <nav className={styles.navigation}>
@@ -82,4 +87,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation; 
+export default Navigation;

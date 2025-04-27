@@ -25,7 +25,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     @media (min-width: 640px) {
       font-size: 1.5rem;
     }
@@ -73,9 +73,9 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     &::before {
-      content: '👋';
+      content: "👋";
       font-size: 1.2rem;
     }
 
@@ -108,7 +108,8 @@
     .links {
       gap: 0.5rem;
 
-      a, .logoutButton {
+      a,
+      .logoutButton {
         padding: 0.4rem 0.8rem;
         font-size: 0.9rem;
       }
@@ -124,4 +125,4 @@
       }
     }
   }
-} 
+}
