@@ -1,0 +1,81 @@
+// frontend/src/pages/Login/LoginPage.tsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useAuth } from '../../hooks/useAuth';
+import styles from './LoginPage.module.scss';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { login, isLoading, error } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>();
+
+  const onSubmit = async (data: LoginFormData) => {
+    const success = await login(data.email, data.password);
+    if (success) {
+      navigate('/events');
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.formWrapper}>
+        <h1>Вход в систему</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              {...register('email', {
+                required: 'Email обязателен',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'Некорректный email',
+                },
+              })}
+            />
+            {errors.email && (
+              <span className={styles.error}>{errors.email.message}</span>
+            )}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="password">Пароль</label>
+            <input
+              id="password"
+              type="password"
+              {...register('password', {
+                required: 'Пароль обязателен',
+                minLength: {
+                  value: 6,
+                  message: 'Пароль должен быть не менее 6 символов',
+                },
+              })}
+            />
+            {errors.password && (
+              <span className={styles.error}>{errors.password.message}</span>
+            )}
+          </div>
+
+          {error && <div className={styles.error}>{error}</div>}
+
+          <button type="submit" className={styles.submitButton} disabled={isLoading}>
+            {isLoading ? 'Вход...' : 'Войти'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;

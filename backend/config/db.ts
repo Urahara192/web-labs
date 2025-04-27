@@ -43,7 +43,7 @@ export const authenticateDB = async (): Promise<void> => {
 // Синхронизация таблиц (force: true — пересоздаст таблицы)
 export const syncDB = async (): Promise<void> => {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
     console.log('Таблицы успешно пересозданы');
   } catch (error) {
     console.error('Ошибка при синхронизации БД:', error);

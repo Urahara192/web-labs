@@ -8,6 +8,7 @@ import {
   CreatedAt,
   UpdatedAt,
   DeletedAt,
+  Sequelize,
 } from 'sequelize-typescript';
 
 /**
@@ -33,6 +34,15 @@ import {
  *         date:
  *           type: string
  *           format: date-time
+ *         createdBy:
+ *           type: string
+ *           format: uuid
+ *           example: "a3fa8c0b-5f01-4c57-9e4d-82bdbf8f82fa"
+ *         participants:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: uuid
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -64,15 +74,41 @@ export class Event extends Model {
   @Column(DataType.DATE)
   declare date: Date;
 
+  @Column(DataType.UUID)
+  declare createdBy: string;
+
+  @Column({
+    type: DataType.ARRAY(DataType.UUID),
+    defaultValue: Sequelize.literal("ARRAY[]::uuid[]"),
+    field: 'participants',
+    get() {
+      const rawValue = this.getDataValue('participants');
+      return rawValue || [];
+    },
+    set(value: string[]) {
+      this.setDataValue('participants', value || []);
+    }
+  })
+  declare participants: string[];
+
   @CreatedAt
-  @Column({ field: 'created_at' })
+  @Column({ 
+    type: DataType.DATE,
+    field: 'created_at' 
+  })
   declare createdAt: Date;
 
   @UpdatedAt
-  @Column({ field: 'updated_at' })
+  @Column({ 
+    type: DataType.DATE,
+    field: 'updated_at' 
+  })
   declare updatedAt: Date;
 
   @DeletedAt
-  @Column({ type: DataType.DATE, field: 'deleted_at' })
+  @Column({ 
+    type: DataType.DATE,
+    field: 'deleted_at' 
+  })
   declare deletedAt: Date | null;
 }

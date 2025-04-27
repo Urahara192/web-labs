@@ -189,9 +189,9 @@ router.post('/register', async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({
+      return res.status(409).json({
         success: false,
-        errors: { email: 'Пользователь с таким email уже существует' },
+        message: 'Пользователь с таким email уже существует',
       });
     }
 
