@@ -189,9 +189,9 @@ router.post('/register', async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({
+      return res.status(409).json({
         success: false,
-        errors: { email: 'Пользователь с таким email уже существует' },
+        message: 'Пользователь с таким email уже существует',
       });
     }
 
@@ -394,7 +394,7 @@ router.post('/logout', authenticate, async (req: Request, res: Response) => {
 
     await BlacklistedToken.create({
       token,
-      expiresAt: new Date(exp * 1000),
+      expires_at: new Date(exp * 1000),
     } as CreationAttributes<BlacklistedToken>);
 
     return res.json({ success: true, message: 'Выход выполнен' });
